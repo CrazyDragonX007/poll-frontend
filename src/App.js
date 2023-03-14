@@ -1,12 +1,15 @@
 import './App.css';
-import Polls from "./components/Polls";
+import Home from "./components/Home";
+import Nav from "./components/Nav";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Polls />
+        <Nav />
       </header>
+        <Home/>
     </div>
   );
 }

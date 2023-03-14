@@ -3,8 +3,7 @@ import "./poll.css";
 
 function Poll(props) {
     const [pollOptions,setPollOptions] = useState();
-    const [question,setQuestion] = useState(props.question);
-    const [answers,setAnswers] = useState(props.answers);
+    const [answers] = useState(props.answers);
     const [totalVotes, setTotalVotes] = useState(0);
     const [voted, setVoted] = useState(false);
     const url = "http://localhost:3001/polls/"+props.pollId+"/vote";
@@ -22,9 +21,7 @@ function Poll(props) {
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" },
             };
-            fetch(url, options)
-                .then((res) => res.json())
-                .then((res) => console.log(res));
+            fetch(url, options).then((res) => res.json()).then((res) => console.log(res));
         }
     };
 
@@ -49,11 +46,12 @@ function Poll(props) {
 
     return (
         <div className="poll">
-            <h1>{question}</h1>
+            <h1 className="text">{props.title}</h1>
+            <h2 className="text">{props.question}</h2>
             <ul className={voted ? "results" : "options"}>
                 {pollOptions}
             </ul>
-            <p>Total Votes: {totalVotes}</p>
+            <p className="text">Total Votes: {totalVotes}</p>
         </div>
     );
 }

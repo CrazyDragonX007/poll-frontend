@@ -1,0 +1,12 @@
+.bar-label {
+    font: 20px 'opensans-bold', sans-serif;
+    letter-spacing: 2px;
+    font-weight: bold;
+    position: relative;
+    top: 10px;
+    left: 10px;
+}
+
+.bar-expand{
+    border-radius: 5px 0 0 5px;
+}

@@ -1,0 +1,17 @@
+.form{
+    width: 60%;
+    align-content: center !important;
+    display: inline-block;
+}
+
+.text{
+    color: white !important;
+}
+
+.bg{
+    background-color: #282c34 !important;
+}
+
+.button1{
+    margin-bottom: 20px;
+}

@@ -8,7 +8,7 @@
 }
 .poll ul li {
     list-style: none;
-    border: 2px solid #00ddf9;
+    border: 4px solid #00ddf9;
     border-radius: 3px;
     line-height: 1rem;
     margin-bottom: 1rem;
@@ -35,4 +35,21 @@
 }
 .poll ul.results li {
     border-color: #999;
+}
+
+.text{
+    color: white;
+}
+
+.button{
+    width: 80%;
+    margin-bottom: 20px;
+    padding: 20px !important;
+    font-size: 20px !important;
+    font-weight: bolder !important;
+}
+
+.back{
+    position: center;
+    margin-bottom: 20px;
 }
