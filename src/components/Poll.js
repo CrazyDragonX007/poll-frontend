@@ -1,26 +1,39 @@
 import React, { useState, useEffect } from "react";
 import "./poll.css";
+import {socket} from "../socket";
 
 function Poll(props) {
     const [pollOptions,setPollOptions] = useState();
-    const [answers] = useState(props.answers);
+    const [answers, setAnswers] = useState(props.answers);
     const [totalVotes, setTotalVotes] = useState(0);
     const [voted, setVoted] = useState(false);
     const url = "http://localhost:3001/polls/"+props.pollId+"/vote";
+
     const submitVote = (e) => {
         if(voted === false) {
             const voteSelected = e.target.dataset.id;
             const body={"answer":voteSelected};
-            console.log(body);
-            // const voteCurrent = pollOptions[voteSelected].votes;
-            // pollOptions[voteSelected].votes = voteCurrent + 1;
+            let ans=answers.slice();
+            for(let i=0;i<ans.length;i++){
+                let t=ans[i];
+                if(voteSelected===t.value){
+                    t.votes+=1;
+                    ans[i]=t;
+                }
+            }
+            setAnswers(ans);
             setTotalVotes(totalVotes + 1);
-            setVoted(!voted);
+            setVoted(true);
             const options = {
                 method: "POST",
                 body: JSON.stringify(body),
                 headers: { "Content-Type": "application/json" },
             };
+            socket.emit('vote',{
+                pollId:props.pollId,
+                socketId:socket.id,
+                answer:voteSelected
+            });
             fetch(url, options).then((res) => res.json()).then((res) => console.log(res));
         }
     };
@@ -32,9 +45,9 @@ function Poll(props) {
                 totalvotes+=ans.votes;
                 return (
                     <li key={ans._id}>
-                        <button onClick={submitVote} data-id={ans.value}>
+                        <button onClick={submitVote} disabled={voted} data-id={ans.value}>
                             {ans.value}
-                            <span> {ans.votes} Votes</span>
+                            <span> - {ans.votes} Votes</span>
                         </button>
                     </li>
                 );
@@ -42,7 +55,8 @@ function Poll(props) {
         }
         setPollOptions(pollOpts);
         setTotalVotes(totalvotes);
-    },[]);
+        // eslint-disable-next-line
+    },[voted,answers]);
 
     return (
         <div className="poll">
@@ -51,7 +65,7 @@ function Poll(props) {
             <ul className={voted ? "results" : "options"}>
                 {pollOptions}
             </ul>
-            <p className="text">Total Votes: {totalVotes}</p>
+            <p className="text">{voted?<span>Thank you for voting! </span>:null}Total Votes: {totalVotes}</p>
         </div>
     );
 }

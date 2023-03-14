@@ -1,52 +1,17 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import Bars from "react-bars";
 import './bar.css';
-import {Form} from "react-bootstrap";
+import {CloseButton, Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import './addPoll.css'
 import {FormEventHandler} from "react";
 
 function AddPoll() {
     const data = [{"label": "Add a new poll", "barBackgroundColor": "#0d0d0c", "value": "100"}]
-    const [answerFields,setAnswerFields] = useState([]);
     const [answerCount,setAnswerCount] = useState(1);
-    const [values, setValues] = useState({});
     const [title,setTitle] = useState('');
     const [question,setQuestion] = useState('');
     const [answers,setAnswers] = useState([]);
-
-    useEffect(()=>{
-        const ans=[(<Form.Group className="mb-3" controlId="formBasicAnswer">
-                    <Form.Label>Enter an answer choice for the poll</Form.Label>
-                    <Form.Control type="text" name="ans1" onChange={onAnswerChange} placeholder="Enter an answer choice for the poll" className="bg text"/>
-                </Form.Group>)];
-        setAnswerFields(ans);
-    },[]);
-
-    const addOption = () => {
-        console.log(answerFields);
-        const ansCount = answerCount+1;
-        const name="ans"+ansCount;
-        const ans=(<Form.Group className="mb-3" controlId="formBasicAnswer">
-                    <Form.Label>Enter an answer choice for the poll</Form.Label>
-                    <Form.Control name={name} onChange={onAnswerChange} type="text" placeholder="Enter an answer choice for the poll" className="bg text"/>
-                </Form.Group>);
-        let newAnswers = answerFields;
-        newAnswers.push(ans);
-        setAnswerFields(newAnswers);
-        setAnswerCount(ansCount);
-    }
-
-    const onTitleChange = (e) => {
-        const value = e.target.value;
-        setTitle(value);
-        console.log(title);
-    }
-
-    const onQuestionChange = (e)=>{
-        const value = e.target.value;
-        setQuestion(value);
-    }
 
     const onAnswerChange = (e) => {
         const name = e.target.name;
@@ -64,8 +29,48 @@ function AddPoll() {
         const temp = {"name":name,"value":value,votes:0}
         ans.push(temp);
         setAnswers(ans);
-        console.log(ans);
     };
+
+    const [answerFields,setAnswerFields] = useState([(<Form.Group name="ans1" className="mb-3" controlId="formBasicAnswer">
+        <Form.Label>Enter an answer choice for the poll</Form.Label>
+        <Form.Control type="text" name="ans1" onChange={onAnswerChange} placeholder="Enter an answer choice for the poll" className="bg text"/>
+    </Form.Group>)]);
+
+    const close = (e) => {
+        const name = e.target.name;
+        console.log(name);
+        console.log(answerFields);
+        let newAnswers=answerFields.slice().filter(t=>t.props.name!==name);
+        let ans=answers.slice().filter(t=>t.name!==name);
+        setAnswerFields(newAnswers);
+        setAnswers(ans);
+    }
+
+    const addOption = () => {
+        const ansCount = answerCount+1;
+        const name="ans"+ansCount;
+        const ans=(<Form.Group name={name} className="mb-3" controlId="formBasicAnswer">
+                    <Form.Label>Enter an answer choice for the poll</Form.Label>
+            <div className="close1">
+                <Form.Control name={name} onChange={onAnswerChange} type="text" placeholder="Enter an answer choice for the poll" className="bg text"/>
+                {/*<CloseButton name={name} onClick={close} className="close" variant="white" />*/}
+            </div>
+                </Form.Group>);
+        let newAnswers = answerFields;
+        newAnswers.push(ans);
+        setAnswerFields(newAnswers);
+        setAnswerCount(ansCount);
+    }
+
+    const onTitleChange = (e) => {
+        const value = e.target.value;
+        setTitle(value);
+    }
+
+    const onQuestionChange = (e)=>{
+        const value = e.target.value;
+        setQuestion(value);
+    }
 
     const submitHandler: FormEventHandler = (event) => {
         event.preventDefault();
@@ -86,7 +91,7 @@ function AddPoll() {
             body: JSON.stringify(body),
             headers: { "Content-Type": "application/json" },
         };
-        fetch(url, options).then((res) => res.json()).then((res) => console.log(res));
+        fetch(url, options).then((res) => res.json()).then((res) => window.location.reload());
     };
 
     return (
