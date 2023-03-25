@@ -16,7 +16,6 @@ function Polls(props){
     useEffect(() => {
         socket.on('voteUpdate', (data) => {
             let newPolls=polls.slice();
-            console.log(newPolls);
             for(let i=0;i<newPolls.length;i++){
                 let poll=newPolls[i];
                 if(data.pollId===poll._id){
@@ -37,7 +36,6 @@ function Polls(props){
                     }
                 }
             }
-            console.log(newPolls);
             setPolls(newPolls);
         });
         return () => socket.off('voteUpdate');
