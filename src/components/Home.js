@@ -14,7 +14,7 @@ function Home(props){
     return (<>
         <br/>
         {toggle?null:<Bars data={data} className="bar-label"/>}
-        {toggle?<AddPoll/>:<Polls socket={props.socket}/>}
+        {toggle?<AddPoll/>:<Polls/>}
         {toggle?<Button variant="dark" className="back" onClick={() => setToggle(false)}>Back</Button>:<Button onClick={newPoll} variant="dark">Add new poll</Button>}
     </>);
 }

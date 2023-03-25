@@ -8,6 +8,20 @@ function Polls(props){
     const [toShow,setToShow] = useState(false);
     const [polls, setPolls] = useState([]);
     const [currentPoll,setCurrentPoll] = useState();
+    const [votedPolls,setVotedPolls] = useState([]);
+
+    const pollVoted = (pollId) => {
+        const votedP = votedPolls.slice();
+        votedP.push(pollId);
+        setVotedPolls(votedP);
+    }
+
+    const isVoted = (pollId) => {
+        if(votedPolls.find((p)=>p===pollId)){
+            return true;
+        }
+        return false;
+    }
 
     useEffect(() => {
         fetch(url).then((response) => response.json()).then(data=>setPolls(data.polls))
@@ -28,10 +42,9 @@ function Polls(props){
                     }
                     poll.answers=answers;
                     newPolls[i]=poll;
-                    console.log(currentPoll,data);
                     if(currentPoll?.props?.pollId===data.pollId){
                         const key=Math.random()*10;
-                        const t = <Poll socket={props.socket} key={key} title={poll.title} pollId={poll._id} question={poll.question} answers={poll.answers}/>
+                        const t = <Poll socket={props.socket} key={key} pollVoted={pollVoted} voted={()=>isVoted(poll._id)} title={poll.title} pollId={poll._id} question={poll.question} answers={poll.answers}/>
                         setCurrentPoll(t);
                     }
                 }
@@ -45,7 +58,7 @@ function Polls(props){
         for(let i=0;i<polls.length;i++){
             const poll=polls[i];
             if(poll._id===id){
-                const temp=<Poll socket={props.socket} key={poll._id} title={poll.title} pollId={poll._id} question={poll.question} answers={poll.answers}/>
+                const temp=<Poll socket={props.socket} pollVoted={pollVoted} voted={()=>isVoted(poll._id)} key={poll._id} title={poll.title} pollId={poll._id} question={poll.question} answers={poll.answers}/>
                 setCurrentPoll(temp);
                 setToShow(true);
             }

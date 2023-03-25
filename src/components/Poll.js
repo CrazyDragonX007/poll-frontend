@@ -6,10 +6,11 @@ function Poll(props) {
     const [pollOptions,setPollOptions] = useState();
     const [answers, setAnswers] = useState(props.answers);
     const [totalVotes, setTotalVotes] = useState(0);
-    const [voted, setVoted] = useState(false);
+    const [voted, setVoted] = useState(props.voted);
     const url = "http://localhost:3001/polls/"+props.pollId+"/vote";
 
     const submitVote = (e) => {
+        props.pollVoted(props.pollId);
         if(voted === false) {
             const voteSelected = e.target.dataset.id;
             const body={"answer":voteSelected};
