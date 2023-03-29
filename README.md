@@ -1,3 +1,7 @@
+IGN Code FOO 2023 Submission
+
+This is a React single page application. Frontend for the poll app.
+
 Prerequisites:
 
 1. Make sure node.js and npm is installed. (Grab it from here - https://nodejs.org/en/download)
